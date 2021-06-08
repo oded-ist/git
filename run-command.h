@@ -483,4 +483,13 @@ int run_processes_parallel_tr2(int n, get_next_task_fn, start_failure_fn,
 			       task_finished_fn, void *pp_cb,
 			       const char *tr2_category, const char *tr2_label);
 
+/**
+ * Convenience function which adds all GIT_* environment variables to env_array
+ * with the exception of GIT_CONFIG_PARAMETERS. When used as the env_array of a
+ * subprocess, these entries cause the corresponding environment variables to
+ * be unset in the subprocess. See local_repo_env in cache.h for more
+ * information.
+ */
+void prepare_other_repo_env(struct strvec *env_array);
+
 #endif

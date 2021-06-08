@@ -1892,3 +1892,13 @@ int run_auto_maintenance(int quiet)
 
 	return run_command(&maint);
 }
+
+void prepare_other_repo_env(struct strvec *env_array)
+{
+	const char * const *var;
+
+	for (var = local_repo_env; *var; var++) {
+		if (strcmp(*var, CONFIG_DATA_ENVIRONMENT))
+			strvec_push(env_array, *var);
+	}
+}
