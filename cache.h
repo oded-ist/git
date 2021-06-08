@@ -1061,7 +1061,6 @@ extern int repository_format_worktree_config;
 struct repository_format {
 	int version;
 	int precious_objects;
-	char *partial_clone; /* value of extensions.partialclone */
 	int worktree_config;
 	int is_bare;
 	int hash_algo;

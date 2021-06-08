@@ -470,7 +470,13 @@ static enum extension_result handle_extension_v0(const char *var,
 		} else if (!strcmp(ext, "partialclone")) {
 			if (!value)
 				return config_error_nonbool(var);
-			data->partial_clone = xstrdup(value);
+			/*
+			 * This config variable will be read together with the
+			 * other relevant config variables in
+			 * promisor_remote_config() in promisor_remote.c, so we
+			 * do not need to read it here. Just report that this
+			 * extension is known.
+			 */
 			return EXTENSION_OK;
 		} else if (!strcmp(ext, "worktreeconfig")) {
 			data->worktree_config = git_config_bool(var, value);
@@ -566,7 +572,6 @@ static int check_repository_format_gently(const char *gitdir, struct repository_
 	}
 
 	repository_format_precious_objects = candidate->precious_objects;
-	set_repository_format_partial_clone(candidate->partial_clone);
 	repository_format_worktree_config = candidate->worktree_config;
 	string_list_clear(&candidate->unknown_extensions, 0);
 	string_list_clear(&candidate->v1_only_extensions, 0);
@@ -650,7 +655,6 @@ void clear_repository_format(struct repository_format *format)
 	string_list_clear(&format->unknown_extensions, 0);
 	string_list_clear(&format->v1_only_extensions, 0);
 	free(format->work_tree);
-	free(format->partial_clone);
 	init_repository_format(format);
 }
 

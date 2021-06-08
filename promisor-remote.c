@@ -7,11 +7,6 @@
 
 static char *repository_format_partial_clone;
 
-void set_repository_format_partial_clone(char *partial_clone)
-{
-	repository_format_partial_clone = xstrdup_or_null(partial_clone);
-}
-
 static int fetch_objects(const char *remote_name,
 			 const struct object_id *oids,
 			 int oid_nr)
@@ -98,6 +93,15 @@ static int promisor_remote_config(const char *var, const char *value, void *data
 	const char *name;
 	size_t namelen;
 	const char *subkey;
+
+	if (!strcmp(var, "extensions.partialclone")) {
+		/*
+		 * NULL value is handled in handle_extension_v0 in setup.c.
+		 */
+		if (value)
+			repository_format_partial_clone = xstrdup(value);
+		return 0;
+	}
 
 	if (parse_config_key(var, "remote", &name, &namelen, &subkey) < 0)
 		return 0;
